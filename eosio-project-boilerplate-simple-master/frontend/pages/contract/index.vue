@@ -11,6 +11,7 @@
           </v-flex>
           <v-text-field v-model="radius" placeholder="Radius (metres)"/>
           <v-text-field v-model="offer" placeholder="Offer Tokens"/>
+          <v-text-field v-model="expires" placeholder="Expires DateTime"/>
         </v-card-text>
         <v-divider/>
         <v-card-actions>
@@ -37,6 +38,8 @@
           <p>Can be called many times by same or various</p>
           <v-text-field v-model="validator_lat" placeholder="latitude" />
           <v-text-field v-model="validator_lng" placeholder="longitude"/>
+          <v-text-field v-model="health" placeholder="health"/>
+          <v-text-field v-model="comment" placeholder="comment"/>
         </v-card-text>
         <v-divider/>
         <v-card-actions>
@@ -61,16 +64,19 @@ export default {
     lng: undefined,
     radius: null,
     offer: null,
+    expires: null,
     plant_lat: null,
     plant_lng: null,
     validator_lat: null,
-    validator_lng: null
+    validator_lng: null,
+    health: 3,
+    comment: ""
     
   }),
   methods: {
     postOffer(){        
         console.log(this.lat, this.lng);
-        eos.contract('testacc').then(acc => acc.addoffer("acc", this.lat, this.radius.number(), "test", this.offer));
+        eos.contract('testacc').then(acc => acc.addoffer("acc", this.lat, this.radius.number(), "test", this.offer, this.expires.toISOString() ));
         //eos.contract('testacc').then(acc => acc.get)
         this.plant_lat = this.lat;
         this.plant_lng = this.lng;
@@ -88,9 +94,10 @@ export default {
       //eos.contract('testacc').then(acc => acc.plant("acc", this.lat, this.lat, now.toISOString() ));
       
     }
-    validateTree(){        
-        eos.contract('testacc').then(acc => acc.plant("acc", this.lat, this.lat));
-        console.log("planted tree");
+    validateTree(){   
+        var now = new Date();     
+        eos.contract('testacc').then(acc => acc.validate("acc", this.lat, now.toISOString(), comment,  health ));
+        console.log("validated tree");
       //postOffer: {
         //lat,lng,radius,desc,tokens    
       //}
