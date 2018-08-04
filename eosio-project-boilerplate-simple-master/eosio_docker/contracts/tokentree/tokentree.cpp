@@ -42,8 +42,8 @@ class treestory : public eosio::contract {
     };
 
     /// @abi action
-    void addoffer(account_name username, long double geo, int radius, const std::string& description, uint64_t offervalue) {
-        require_auth(username);
+    void addoffer(account_name username, double geo, uint32_t radius, const std::string& description, uint64_t offervalue) {
+        require_auth(username); // this user is a sponsor
         // Let's make sure the primary key doesn't exist
         // _sponsor.end() is in a way similar to null and it means that the offervalue isn't found
         eosio_assert(_treepatchs.find(geo) == _treepatchs.end(), "This lat,lng already exists in the treestory");
@@ -60,12 +60,13 @@ class treestory : public eosio::contract {
     } 
 
     /// @abi action
-    void plant(account_name username, long double geo, long double treepatchkey, time planted) {
-        require_auth(username);
+    void plant(account_name username, double geo, double treepatchkey, time planted) {
+        require_auth(username); // this user is a planter
         // Let's make sure the primary key doesn't exist
         // _sponsor.end() is in a way similar to null and it means that the offervalue isn't found
         eosio_assert(_trees.find(geo) == _trees.end(), "This lat,lng of tree already exists in the treestory treelist");
-        
+        //*** assert hasn't expired 
+
         // locate the treepatch by treepatchId
         //eosio_assert(_trees.find(geo) == _trees.end(), "This tree patch offer has expired");
         
@@ -81,14 +82,14 @@ class treestory : public eosio::contract {
         });
     } 
 
-    //void validate()
     /// @abi action
-    void validate(account_name username, long double geo, time validated, std::string comment, int health) {
-        require_auth(username);
+    void validate(account_name username, double geo, time validated, std::string comment, uint8_t health) {
+        require_auth(username); // this user is a validator
         // Let's make sure the primary key doesn't exist
         // key = treeId, datetime, user
         auto tree = _trees.find(geo);
         eosio_assert(tree == _trees.end(), "This lat,lng of tree already exists in the treestory treelist");
+        //*** assert hasn't expired 
 
         _validations.emplace(get_self(), [&]( auto& p ) {
             //p.geo = geo;     
@@ -101,6 +102,29 @@ class treestory : public eosio::contract {
         });
     } 
 
+/*
+    /// @abi action
+    void payout(account_name username, time closed) {
+        require_auth(username); // this user is a validator
+
+
+        // Let's make sure the primary key doesn't exist
+        // key = treeId, datetime, user
+        //auto tree = _trees.find(geo);
+         assert 
+        eosio_assert(tree == _trees.end(), "This lat,lng of tree already exists in the treestory treelist");
+
+        _validations.emplace(get_self(), [&]( auto& p ) {
+            //p.geo = geo;     
+            p.treegeokey = geo;
+            p.validator = username; // the user who validated primary key
+            p.when = validated;
+            p.datetimestamp = validated; // as epoch
+            p.comment = comment;
+            p.health = health;
+        });
+    } */
+
   private: 
     // Setup the struct that represents the row in the table
 
@@ -108,17 +132,17 @@ class treestory : public eosio::contract {
     
     /// @abi table treepatch
     struct treepatch {
-      long double geo; // primary key, geo location
+      double geo; // primary key, geo location
         //geo_location.latitude = getSignificant(geo);
         //geo_location.longitude = getDecimals(geo);
-      int radius;
+      uint32_t radius;
       std::string description;
       uint64_t offervalue;
 
       std::string sponsor; // sponsor primary key
       time offered; // set when user plants the tree
 
-      long double primary_key()const { return geo; }  
+      double primary_key()const { return geo; }  
       // PK is DMS Degree, Minutes, Seconds format to agree with a single long double 
       // See: https://stackoverflow.com/questions/1140189/converting-latitude-and-longitude-to-decimal-values
       uint64_t by_offervalue()const { return offervalue; }
@@ -130,7 +154,7 @@ class treestory : public eosio::contract {
     
     /// @abi table tree
     struct tree {
-      long double geo; // primary key, geo location
+      double geo; // primary key, geo location
         //geo_location.latitude = getSignificant(geo);
         //geo_location.longitude = getDecimals(geo);
       uint64_t earned;  // this is determined and distributed when the contract ends
@@ -139,9 +163,9 @@ class treestory : public eosio::contract {
       std::string planter; // planter primary key
       time planted; // set when user plants the tree
 
-      int approxheight; // indication of tree maturity
+      uint8_t approxheight; // indication of tree maturity
 
-      long double primary_key()const { return geo; }  
+      double primary_key()const { return geo; }  
       uint64_t by_approxheightvalue()const { return approxheight; }
 
     };
@@ -151,15 +175,15 @@ class treestory : public eosio::contract {
     
 
     struct validation {
-        long double treegeokey;
+        double treegeokey;
         std::string validator; // the user who validated primary key
         time when;
-        long int datetimestamp;
+        uint64_t datetimestamp;
         std::string comment;
-        int health = 100;  // default to 100%
+        uint8_t health = 100;  // default to 100%
 
         // hash of tree PK + verification
-        long double primary_key()const { return treegeokey+datetimestamp;  }  
+        double primary_key()const { return treegeokey+datetimestamp;  }  
         uint64_t by_treepatchgeokey()const { return treegeokey; }
     };
     /// @abi table
@@ -173,4 +197,6 @@ class treestory : public eosio::contract {
 };
 
 EOSIO_ABI( treestory, (addoffer)(plant)(validate) )
+//(payout) 
+
 
