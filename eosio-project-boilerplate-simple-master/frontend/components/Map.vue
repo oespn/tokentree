@@ -2,19 +2,12 @@
   <GmapMap
     :center="center"
     :zoom="10">
-    <template v-for="tree in trees">
-      <GmapMarker :key="tree.id"
-        :position="{ lat: tree.lat, lng: tree.lng }"
-        clickable
-        @click="tree.selected = true">
-      </GmapMarker>
-      <GmapInfoWindow :key="tree.id"
-        v-if="tree.selected"
-        :position="{ lat: tree.lat, lng: tree.lng }"
-        @closeclick="tree.selected = false">
-        hello
-      </GmapInfoWindow>
-    </template>
+    <GmapMarker
+      v-for="tree in trees" :key="tree.id"
+      :position="{ lat: tree.lat, lng: tree.lng }"
+      clickable
+      @click="$emit('selected', tree)">
+    </GmapMarker>
   </GmapMap>
 </template>
 
