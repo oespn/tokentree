@@ -83,14 +83,16 @@ class treestory : public eosio::contract {
 
     //void validate()
     /// @abi action
-    void validate(account_name username, long double geo, long double treeId, time validated, std::string comment, int health) {
+    void validate(account_name username, long double geo, time validated, std::string comment, int health) {
         require_auth(username);
         // Let's make sure the primary key doesn't exist
         // key = treeId, datetime, user
-        eosio_assert(_trees.find(geo) == _trees.end(), "This lat,lng of tree already exists in the treestory treelist");
-        
+        auto tree = _trees.find(geo);
+        eosio_assert(tree == _trees.end(), "This lat,lng of tree already exists in the treestory treelist");
+
         _validations.emplace(get_self(), [&]( auto& p ) {
             //p.geo = geo;     
+            p.treegeokey = geo;
             p.validator = username; // the user who validated primary key
             p.when = validated;
             p.datetimestamp = validated; // as epoch
@@ -162,8 +164,6 @@ class treestory : public eosio::contract {
     };
     /// @abi table
     typedef eosio::multi_index< N(validations), validation, indexed_by<N(treegeokey), const_mem_fun<validation, uint64_t, &validation::by_treepatchgeokey>>> validations;
-    
-
     
     treepatchs _treepatchs;
     trees _trees;
