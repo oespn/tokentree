@@ -1,0 +1,76 @@
+[
+  {
+    "id": "aeu3ohi4u2g5iug212345",
+    "lat": -33.8731535,
+    "lng": 151.1994603,
+    "address": {
+      "street": "14 Darling Dr",
+      "city": "Sydney NSW 2000, Australia"
+    },
+    "planter": "John",
+    "plantedAt": "3480931863",
+    "verifications": [
+      {
+        "verifiedAt": "3480931883",
+        "verifier": "Laurie",
+        "comment": "tree is fine",
+        "health": 80
+      },
+      {
+        "verifiedAt": "3480931893",        
+        "verifier": "Jack",
+        "comment": "tree is fine",
+        "health": 80
+      },
+      {
+        "verifiedAt": "3480931899",
+        "verifier": "Laurie",
+        "comment": "tree is not healty",
+        "health": 10
+      }
+    ],
+    "sponsors": [
+      {
+        "sponsoredAt": "3480931899",
+        "sponsor": "134t8igu134igu341",
+        "value": 10000
+      }
+    ]
+  },
+  {
+    "id": "aeu3ohi342e4u2g5iug245",
+    "lat": -33.88,
+    "lng": 151.12,
+    "address": {
+      "street": "60 Croydon Rd",
+      "city": "Croydon NSW 2132, Australia"
+    },
+    "planter": "Jack",
+    "plantedAt": "3480931863",
+    "verifications": []
+  },
+  {
+    "id": "aeu3og2422hi4u2g5iug245",
+    "lat": -33.87,
+    "lng": 151.12,
+    "address": {
+      "street": "57 Queens Rd",
+      "city": "Five Dock NSW 2046, Australia"
+    },
+    "planter": "Alberto",
+    "plantedAt": "3480931863",
+    "verifications": []
+  },
+  {
+    "id": "aeu3ohi42g442u2g5iug245",
+    "lat": -33.8,
+    "lng": 151.3,
+    "address": {
+      "street": "34 Bower St",
+      "city": "Manly NSW 2095, Australia"
+    },
+    "planter": "Laurie",
+    "plantedAt": "3480931863",
+    "verifications": []
+  }
+]
