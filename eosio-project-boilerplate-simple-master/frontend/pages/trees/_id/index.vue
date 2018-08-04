@@ -6,7 +6,7 @@
       </v-btn>
       <v-toolbar-title>{{ tree.planter }}'s tree</v-toolbar-title>
     </v-toolbar>
-    <img src="https://i.ytimg.com/vi/7BPhS5PdXHU/maxresdefault.jpg" height="250px"/>
+    <img :src="tree.picture" height="250px"/>
     <v-list two-line>
       <v-list-tile
         v-for="(menu, index) in menus" :key="index"
