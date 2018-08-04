@@ -150,6 +150,7 @@ class treestory : public eosio::contract {
         auto plantertokens = treepatch->offervalue/2;
         // half of tokens go to the tree planters 
         //** future: check that they have at least 3 verifications by other parties
+        auto planterpay = plantertokens / treepatch.validatecount;
         std::vector<double> treesForModify;
           // find all tree items
           for(auto& item : _trees)
@@ -162,10 +163,13 @@ class treestory : public eosio::contract {
           // update the paid out tokens to each planter
           for (double key : treesForModify)
           {
-              //seek the planter
+              //seek the planter & payout
           }
 
-        // balance divided by the trees verifiers 
+        // balance divided by the tree verifiers 
+        auto verifiertokens = treepatch->offervalue - planterpay; 
+        auto verifierpay = verifiertokens / treepatch.validatecount;
+        
           // find all tree verifiers
           std::vector<double> keysForModify;
           for(auto& item : _validations)
@@ -178,7 +182,7 @@ class treestory : public eosio::contract {
           // update the paid out tokens to each planter
           for (double key : keysForModify)
           {
-              //seek the planter
+              //seek the validator & payout
           }
 
         // for each associated validation - pay out the share of the tokens
