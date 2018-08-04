@@ -6,7 +6,11 @@
   </v-layout>
 </template>
 
+
+
+
 <script>
+import eos from "~/lib/eos"
 
 
 export default {
@@ -24,3 +28,5 @@ export default {
   }
 }
 </script>
+
+  

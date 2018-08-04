@@ -47,6 +47,7 @@ class treestory : public eosio::contract {
         // Let's make sure the primary key doesn't exist
         // _sponsor.end() is in a way similar to null and it means that the offervalue isn't found
         eosio_assert(_treepatchs.find(geo) == _treepatchs.end(), "This lat,lng already exists in the treestory");
+        //** sender
         _treepatchs.emplace(get_self(), [&]( auto& p ) {
             p.sponsor = username;
             p.geo = geo;         
